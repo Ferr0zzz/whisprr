@@ -34,3 +34,20 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+### Production storage and rate limiting
+
+The local development fallback stores secrets in memory. Before deploying to Vercel,
+create an Upstash Redis database and add these environment variables to the Vercel
+project:
+
+```text
+KV_REST_API_URL
+KV_REST_API_TOKEN
+```
+
+The equivalent `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` names are
+also supported. Redis is used for persistent secret storage, atomic burn-after-read
+consumption, read-status tracking, and rate limiting across serverless instances.
+Without these variables, the app falls back to an in-memory store for local
+development only; it must not be used as production storage.
